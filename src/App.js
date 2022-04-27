@@ -1,25 +1,57 @@
-import logo from './logo.svg';
-import './App.css';
+import React from "react";
+import {BrowserRouter as Router, Redirect, Route, Switch} from 'react-router-dom'
+import './App.css'
+import {Planets, Planet} from './pages';
+import {ErrorBoundary, Header, NotFoundIndicator, SwapiServiceProvider} from './components';
+import {Api} from "./services/api";
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+const routeList = [
+    {
+        path: '/planets/',
+        component: Planets,
+        isExact: true,
+    },
+    {
+        path: '/planet/:id',
+        component: Planet,
+        isExact: true,
+    }
+  ]
+
+
+class App extends React.Component {
+    state = {
+        swapiService: new Api(),
+        hasError: false,
+    }
+
+    componentDidCatch(error, errorInfo) {
+        this.setState({ hasError: true })
+    }
+
+
+    render() {
+        return (
+            <ErrorBoundary>
+                <div className="App">
+                    <SwapiServiceProvider value={this.state.swapiService} >
+                        <Router>
+                            <Header/>
+                            <Switch>
+                                {routeList.map(({path, component, isExact}) =>
+                                    <Route component={component} key={path} path={path} exact={isExact}/> )
+                                }
+                                <Redirect to={'/planets/?page=1'}/>
+                                <Route component={NotFoundIndicator}/>
+                            </Switch>
+                        </Router>
+                    </SwapiServiceProvider>
+                </div>
+            </ErrorBoundary>
+        );
+    }
+
+
 }
 
 export default App;

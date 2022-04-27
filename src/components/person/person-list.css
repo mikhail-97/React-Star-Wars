@@ -1,0 +1,24 @@
+
+.person-list {
+    margin-top: 30px;
+    margin-bottom: 60px;
+}
+
+.filterLabel {
+    margin-right: 6px;
+}
+
+.containerFilter {
+    display: flex;
+    flex-direction: column;
+    margin-top: 40px;
+}
+
+.d-flex div {
+    margin-top: 10px;
+}
+
+.item-gender {
+    margin-left: 5px;
+    margin-right: 10px;
+}
